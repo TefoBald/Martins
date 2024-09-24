@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for # type: ign
 app = Flask(__name__)
 
 # Inicializando o número de vagas para pessoas com deficiência
-vagas_totais = 40
+vagas_totais = 10
 vagas_ocupadas = 0
 
 @app.route('/')
