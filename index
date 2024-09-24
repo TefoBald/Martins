@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador de Vagas de Estacionamento</title>
+</head>
+<body>
+    <h1>Contador de Vagas de Estacionamento para Pessoas com Deficiência</h1>
+    <p>Vagas Totais: {{ vagas_totais }}</p>
+    <p>Vagas Ocupadas: {{ vagas_ocupadas }}</p>
+    <p>Vagas Disponíveis: {{ vagas_disponiveis }}</p>
+
+    <form method="POST" action="/ocupar">
+        <button type="submit">Ocupar Vaga</button>
+    </form>
+
+    <form method="POST" action="/liberar">
+        <button type="submit">Liberar Vaga</button>
+    </form>
+</body>
+</html>
