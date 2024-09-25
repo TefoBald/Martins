@@ -1,46 +1,33 @@
-name: Azure Static Web Apps CI/CD
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import UploadVideo from './components/UploadVideo';
+import VideoList from './components/VideoList';
+import './App.css';
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
-    branches:
-      - main
+function App() {
+  const [videos, setVideos] = useState([]);
 
-jobs:
-  build_and_deploy_job:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
-    runs-on: ubuntu-latest
-    name: Build and Deploy Job
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: true
-          lfs: false
-      - name: Build And Deploy
-        id: builddeploy
-        uses: Azure/static-web-apps-deploy@v1
-        with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_BLUE_WATER_02644680F }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
-          action: "upload"
-          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
-          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "/" # App source code path
-          api_location: "" # Api source code path - optional
-          output_location: "build" # Built app content directory - optional
-          ###### End of Repository/Build Configurations ######
+  // Função para carregar a lista de vídeos da API
+  const fetchVideos = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/videos'); // URL da API
+      setVideos(response.data);
+    } catch (error) {
+      console.error('Erro ao buscar vídeos', error);
+    }
+  };
 
-  close_pull_request_job:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
-    runs-on: ubuntu-latest
-    name: Close Pull Request Job
-    steps:
-      - name: Close Pull Request
-        id: closepullrequest
-        uses: Azure/static-web-apps-deploy@v1
-        with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_BLUE_WATER_02644680F }}
-          action: "close"
+  useEffect(() => {
+    fetchVideos();
+  }, []);
+
+  return (
+    <div className="App">
+      <h1>Sistema de Armazenamento de Vídeos DVR</h1>
+      <UploadVideo fetchVideos={fetchVideos} />
+      <VideoList videos={videos} />
+    </div>
+  );
+}
+
+export default App;
